@@ -1,0 +1,74 @@
+int i = 0;
+
+void setup() {
+  pinMode(1, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(7, INPUT);
+  pinMode(9, INPUT);
+}
+
+void mandatory()
+{
+    digitalWrite(3, HIGH);
+    digitalWrite(5, HIGH);
+    delay(500);
+    digitalWrite(3, LOW);
+    digitalWrite(5, LOW);
+    delay(500);
+}
+
+void bonus1()
+{
+    digitalWrite(3, HIGH);
+    digitalWrite(5, LOW);
+    delay(1000);
+    digitalWrite(3, LOW);
+    digitalWrite(5, HIGH);
+    delay(1000);
+}
+void bonus2()
+{
+    digitalWrite(5, HIGH);
+    digitalWrite(3, LOW);
+    delay(500);
+    digitalWrite(3, HIGH);
+    delay (500);
+    digitalWrite(5, LOW);
+    digitalWrite(3, LOW);
+    delay (500);
+    digitalWrite(3, HIGH);
+    delay(500);
+}
+
+void loop()
+{
+  digitalWrite(1, HIGH);
+  while (digitalRead(9) == HIGH)
+  {
+      i++;
+      delay(300);
+      if (i > 2)
+        i = 0;
+  }
+  while (digitalRead(7) == HIGH)
+  {
+    while (digitalRead(9) == HIGH)
+    {
+        i++;
+        if (i > 2)
+          i = 0;
+        delay(300);
+        break ;
+    }
+    digitalWrite(1, LOW);
+    if (i == 0)
+      mandatory();
+    if (i == 1)
+      bonus1();
+    if (i == 2)
+      bonus2();
+  }
+  digitalWrite(3, LOW);
+  digitalWrite(5, LOW);
+}
