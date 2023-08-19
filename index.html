@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Button Control</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+  <button id="button1">Button 1</button>
+  <button id="button2">Button 2</button>
+
+  <script>
+    $(document).ready(function() {
+      $("#button1").click(function() {
+        sendData("button1", true);
+      });
+
+      $("#button2").click(function() {
+        sendData("button2", true);
+      });
+
+      function sendData(buttonId, state) {
+        $.ajax({
+          type: "GET",
+          url: "/button",
+          data: { id: buttonId, state: state },
+          success: function(response) {
+            console.log("Data sent successfully");
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
