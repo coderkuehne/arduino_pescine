@@ -22,41 +22,74 @@ ESP8266WebServer server(80);
   }
 }
 
-//void handleButton() {
-//  String switchId = server.arg("switchId");
-//  String state = server.arg("state");
-//
-//  // Handle the button state data here
-//  Serial.print("Switch ID: ");
-//  Serial.println(switchId);
-//  Serial.print("State: ");
-//  Serial.println(state);
-//  // Send a response back to the client
-//  server.send(200, "text/plain", "Data received");
-//}
 
 void handleButton() {
+  int i = 0;
   const char *switchIdCharPtr;
   String switchId = server.arg("id");
+  String pattern =server.arg("pattern_state");
   switchIdCharPtr = switchId.c_str();
   String state = server.arg("state");
-
   // Handle the button state data here
   Serial.print("Switch ID: ");
   Serial.println(switchId);
   Serial.print("State: ");
   Serial.println(state);
+  Serial.println("Pattern_state ");
+  Serial.println(pattern);
 
-  // Update LEDs based on the switch state
-   if (state == "true") {
-        leds[atoi(switchIdCharPtr)] = CRGB::server.arg("color"); FastLED.show();
-    } else {
+   //Update LEDs based on the switch state
+  if(pattern == "on")
+  {
+       
+       while(i < 63){
+        if (i < 8)
+          leds[i] = CRGB::White;
+        if (i >= 8 && i < 16)
+          leds[i] = CRGB::Red;
+        if (i >= 16 && i < 24)
+          leds[i] = CRGB::Blue;
+        if (i >= 24 && i < 32)
+          leds[i] = CRGB::Green;
+        if (i >= 32 && i < 40)
+          leds[i] = CRGB::Yellow;
+        if (i >= 40 && i < 48)
+          leds[i] = CRGB::Purple;
+        if (i >= 48 && i < 56)
+          leds[i] = CRGB::Brown;
+        if (i >= 56 && i < 64)
+          leds[i] = CRGB::Cyan;
+        pattern =server.arg("pattern_state");
+        i++;
+        delay(25);
+        FastLED.show();
+       }
+       while(i >= 0){
+        leds[i] = CRGB::White;
+        pattern =server.arg("pattern_state");
+        i--;
+        delay(25);
+        FastLED.show();
+       }
+  }
+    else if (pattern == "off"){
+      int j = 0;
+      while (j < 64){
+        leds[j++] = CRGB::Black;
+        FastLED.show();
+      }
+    }
+   else if (state == "true") {
+       leds[atoi(switchIdCharPtr)] = CRGB::White;
+    } 
+    else if (state == "false"){
       leds[atoi(switchIdCharPtr)] = CRGB::Black;
     }
   // Send a response back to the client
   server.send(200, "text/plain", "Data received");
   FastLED.show(); // Update the LED display
 }
+
 
 void setup() {
   pinMode(DATA_PIN, OUTPUT);
